@@ -1,5 +1,7 @@
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const addItemToServer = async (task, date) => {
-  const response = await fetch("http://localhost:3005/api/todo", {
+  const response = await fetch(`${API_URL}/todo`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -11,31 +13,30 @@ export const addItemToServer = async (task, date) => {
     throw new Error("Failed to add item to server");
   }
 
-  const data = await response.json();   // wait for JSON data
+  const data = await response.json();
   return mapServerItemToLocalItem(data);
 };
 
 export const fetchItemsFromServer = async () => {
-  const response = await fetch("http://localhost:3005/api/todo");
-  const data = await response.json();   // wait for JSON data
+  const response = await fetch(`${API_URL}/todo`);
+  const data = await response.json();
   return data.map(mapServerItemToLocalItem);
-}
+};
 
 export const updateItemOnServer = async (id, updates) => {
-  const response = await fetch(`http://localhost:3005/api/todo/${id}/completed`, {
+  const response = await fetch(`${API_URL}/todo/${id}/completed`, {
     method: "PUT",
   });
-  const data = await response.json();   // wait for JSON data
+  const data = await response.json();
   return mapServerItemToLocalItem(data);
-}
+};
 
 export const deleteItemFromServer = async (id) => {
-  await fetch(`http://localhost:3005/api/todo/${id}`, {
+  await fetch(`${API_URL}/todo/${id}`, {
     method: "DELETE",
-  }); 
-  return id;  // return the id of the deleted item
-}
-
+  });
+  return id;
+};
 
 const mapServerItemToLocalItem = (serverItem) => {
   return {
